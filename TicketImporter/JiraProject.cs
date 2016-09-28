@@ -97,9 +97,14 @@ namespace TicketImporter
                 onDetailedProcessing(jiraTicket.key + " - " + jiraTicket.fields.summary);
 
                 var ticket = new Ticket();
-                ticket.TicketType = map[jiraTicket.fields.issuetype.name];
+                var jiraTicketType = jiraTicket.fields.issuetype.name;
+
+                // if (jiraTicketType != "Story")
+                //    continue;
+
+                ticket.TicketType = map[jiraTicketType];
                 ticket.ID = jiraTicket.key;
-                ticket.Summary = JiraString.StripNonPrintable(jiraTicket.fields.summary);
+                ticket.Summary = JiraString.StripNonPrintable(jiraTicket.key) + ": " + JiraString.StripNonPrintable(jiraTicket.fields.summary);
 
                 var status = jiraTicket.fields.status.statusCategory.key.ToUpper();
                 switch (status)
@@ -117,6 +122,9 @@ namespace TicketImporter
                         ticket.TicketState = Ticket.State.Unknown;
                         break;
                 }
+
+                // if (ticket.TicketState != Ticket.State.Todo)
+                //     continue;
 
                 ticket.Parent = jiraTicket.fields.parent.key;
 
