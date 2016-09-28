@@ -55,7 +55,7 @@ namespace TicketImporter
                 var priority = "";
                 if (string.IsNullOrWhiteSpace(lookUp) == false)
                 {
-                    priority = map[lookUp];
+                    map.TryGetValue(lookUp, out priority);
                 }
                 return priority;
             }
